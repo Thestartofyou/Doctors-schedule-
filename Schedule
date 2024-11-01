@@ -1,0 +1,155 @@
+import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+
+const doctors = [
+  {
+    id: '1',
+    name: 'Dr. Sarah Johnson',
+    specialty: 'Cardiologist',
+    nextAvailable: 'Tomorrow 2:00 PM',
+    imageUrl: 'https://via.placeholder.com/150', // Replace with actual image URLs
+  },
+  {
+    id: '2',
+    name: 'Dr. Michael Chen',
+    specialty: 'Pediatrician',
+    nextAvailable: 'Today 4:30 PM',
+    imageUrl: 'https://via.placeholder.com/150',
+  },
+  {
+    id: '3',
+    name: 'Dr. Emily Williams',
+    specialty: 'Dermatologist',
+    nextAvailable: 'Friday 10:00 AM',
+    imageUrl: 'https://via.placeholder.com/150',
+  },
+];
+
+export default function App() {
+  const [selectedTab, setSelectedTab] = useState('Doctors');
+
+  const renderDoctorItem = ({ item }) => (
+    <View style={styles.doctorCard}>
+      <Image source={{ uri: item.imageUrl }} style={styles.doctorImage} />
+      <View style={styles.doctorInfo}>
+        <Text style={styles.doctorName}>{item.name}</Text>
+        <Text style={styles.doctorSpecialty}>{item.specialty}</Text>
+        <Text style={styles.nextAvailable}>Next Available: {item.nextAvailable}</Text>
+      </View>
+    </View>
+  );
+
+  return (
+    <View style={styles.container}>
+      {/* Tabs */}
+      <View style={styles.tabContainer}>
+        <TouchableOpacity onPress={() => setSelectedTab('Doctors')}>
+          <Text style={[styles.tabText, selectedTab === 'Doctors' && styles.activeTab]}>Doctors</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setSelectedTab('My Appointments')}>
+          <Text style={[styles.tabText, selectedTab === 'My Appointments' && styles.activeTab]}>My Appointments</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Content */}
+      {selectedTab === 'Doctors' ? (
+        <FlatList
+          data={doctors}
+          renderItem={renderDoctorItem}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.listContainer}
+        />
+      ) : (
+        <View style={styles.appointmentsContainer}>
+          <Text style={styles.noAppointmentsText}>No appointments available</Text>
+        </View>
+      )}
+
+      {/* Bottom Navigation */}
+      <View style={styles.bottomNavigation}>
+        <Text style={styles.bottomNavText}>Back</Text>
+        <Text style={styles.bottomNavText}>More</Text>
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F4F4F4',
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 10,
+    backgroundColor: '#fff',
+  },
+  tabText: {
+    fontSize: 16,
+    color: '#888',
+  },
+  activeTab: {
+    color: '#007AFF',
+    fontWeight: 'bold',
+  },
+  listContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 10,
+  },
+  doctorCard: {
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 16,
+    marginBottom: 10,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+  },
+  doctorImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 16,
+  },
+  doctorInfo: {
+    flex: 1,
+  },
+  doctorName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  doctorSpecialty: {
+    fontSize: 14,
+    color: '#666',
+  },
+  nextAvailable: {
+    fontSize: 14,
+    color: '#007AFF',
+    marginTop: 4,
+  },
+  appointmentsContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noAppointmentsText: {
+    fontSize: 16,
+    color: '#888',
+  },
+  bottomNavigation: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 16,
+    borderTopWidth: 1,
+    borderColor: '#E0E0E0',
+  },
+  bottomNavText: {
+    fontSize: 16,
+    color: '#333',
+  },
+});
